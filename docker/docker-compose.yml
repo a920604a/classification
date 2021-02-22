@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  yuan-algorithm-mysql:
+    build:
+      context: database/
+      dockerfile: Dockerfile
+    image: yuan-predictor-database:2.0.0
+    container_name: yuan-predictor-database
+    restart: unless-stopped
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./database/data:/var/lib/mysql
+    networks:
+      yuan-prediction:
+        aliases:
+          - yuan-algorithm-mysql
+
+  yuan-algorithm:
+    image: yuan-predictor:2.0.0
+    container_name: yuan-predictor-algorithm
+    restart: unless-stopped
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=0
+    volumes:
+      - /home/yuan-algorithm/image-classification:/workspace/yuan-algorithm/image-classification
+    networks:
+      yuan-prediction:
+        aliases:
+          - yuan-algorithm
+    links:
+      - yuan-algorithm-mysql
+    command: /workspace/yuan-algorithm/image-classification/run.sh
+
+networks:
+  yuan-prediction:
+    external: false

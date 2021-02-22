@@ -1,0 +1,67 @@
+/*
+ * @Author: yuan
+ * @Date: 2021-02-22 17:15:22
+ * @LastEditTime: 2021-02-22 17:19:36
+ * @FilePath: /classification/image-classification/config.json
+ */
+{
+    "gpus": [
+        0
+    ],
+    "thread_pool": 5,
+    "process_pool":2,
+    "batch_size": 5,
+    "result_path": "/workspace/yuan-algorithm/image-classification/result",
+    "mount_folder_path": "/workspace/yuan-algorithm/image-classification/datasets/share",
+    "input_folder_path": "/workspace/yuan-algorithm/image-classification/datasets/ketmac",
+    "create_by": "admin",
+    "description":{
+        "NG":"真点",
+        "OK":"假点"
+    },
+    "jobs": [
+        {
+            "job_name": "default",
+            "site_name": "site_name",
+            "product_name": "DependJob",
+            "model": {
+                "image_size": [
+                    128,
+                    128
+                ],
+                "model_file": "/workspace/yuan-algorithm/image-classification/checkpoint/xception/Thursday_04_February_2021_22h_28m_22s/xception-132-best.pth",
+                "labels": [
+                    "NG",
+                    "OK"
+                ],
+                "focus_labels": {
+                    "NG": 0.7,
+                    "OK": 0.8
+                },
+                "name": "xception"
+            }
+        },
+        {
+            "job_name": "ycmb18a",
+            "site_name": "site_name",
+            "product_name": "DependJob",
+            
+            "model": {
+                "image_size": [
+                    128,
+                    128
+                ],
+                "model_file": "/workspace/yuan-algorithm/image-classification/checkpoint/xception/Thursday_04_February_2021_22h_28m_22s/xception-132-best.pth",
+                "labels": [
+                    "NG",
+                    "OK"
+                ],
+                "focus_labels": {
+                    "NG": 0.45,
+                    "OK": 0.5
+                },
+                "name": "xception"
+            }
+        }
+    ]
+}
