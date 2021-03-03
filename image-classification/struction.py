@@ -1,7 +1,7 @@
 from collections import namedtuple
 import torch
-from utils import get_network, get_valid_dataloader
-
+from utils.loader import get_valid_dataloader, get_test_dataloader
+from utils.network import get_network
 db_data = namedtuple('db_data', ['model_name',
                                  'site_name',
                                  'product_name',
@@ -20,7 +20,7 @@ db_data = namedtuple('db_data', ['model_name',
                                  'description',
                                  'confidence',
                                  'create_by',
-                                #  'create_at',
+                                 #  'create_at',
                                  'update_by'
                                  ])
 
@@ -57,17 +57,15 @@ db_data = namedtuple('db_data', ['model_name',
 class Cfg():
     def __init__(self, config):
 
-        self.gpus = config['gpus']
-        self.thread_pool = config['thread_pool']
-        self.process_pool = config['process_pool']
-        self.batch_size = config['batch_size']
-
-        self.result_path = config['result_path']
-        self.mount_folder_path = config['mount_folder_path']
-        self.input_folder_path = config['input_folder_path']
-
-        self.create_by = config['create_by']
-        self.description = config['description']
+        self.gpus = config.get('gpu')
+        self.thread_pool = config.get('thread_pool')
+        self.process_pool = config.get('process_pool')
+        self.batch_size = config.get('batch_size')
+        self.result_path = config.get('result_path')
+        self.mount_folder_path = config.get('mount_folder_path')
+        self.input_folder_path = config.get('input_folder_path')
+        self.create_by = config.get('create_by')
+        self.description = config.get('description')
 
 
 class Child_Cfg(Cfg):
@@ -103,20 +101,73 @@ class Child_Cfg(Cfg):
         # self.jobs = [Job(j) for j in config['jobs']]
 
 
+class Config(Cfg):
+    model = namedtuple('model',
+                       ['image_size', 'model_file',
+                        'labels', 'focus_labels', 'net', 'gpu'
+                        ])
+
+    def __init__(self, config):
+        super(Config, self).__init__(config)
+
+        self.jobs = config.get('jobs')
+
+        self.job_names = [j.get('job_name') for j in config.get('jobs')]
+
+        self.default = [j for j in self.jobs if j.get('job_name') == 'default']
+
+    def get_job_config(self, job_name):
+        for j in self.jobs:
+            if j['job_name'] == job_name:
+                return j
+
+        else:
+            return self.default[0]
+
+    def get_model_config(self, job_name):
+
+        ret = self.get_job_config(job_name)
+
+        m = ret.get('model')
+
+        model = Child_Cfg.model(
+            image_size=m.get('image_size'),
+            model_file=m.get('model_file'),
+            labels=m.get('labels'),
+            focus_labels=m.get('focus_labels'),
+            net=m.get('name'),
+            gpu=torch.cuda.is_available()
+        )
+
+        return model, ret
+
+
 class NN_model():
     """
-    one job mapping to one data_loader
+    one img_path mapping to one data_loader
     """
+
     def __init__(self, model, batch_size, img_path, works):
         self.model = model
         self.net = get_network(self.model)
         self.test_loader = get_valid_dataloader(
             root_path=img_path,
-            num_workers=works,
+            num_workers=works,   # multi-threading
             batch_size=batch_size,
             shuffle=False,
             size=tuple(model.image_size)
         )
+        # class_to_idx = {l: i for i, l in enumerate(self.model.labels)}
+        # classes = self.model.labels,
+        # self.test_loader = get_test_dataloader(
+        #     root_path=img_path,
+        #     num_workers=works,   # multi-threading
+        #     batch_size=batch_size,
+        #     shuffle=False,
+        #     size=tuple(model.image_size),
+        #     classes=classes,
+        #     class_to_idx=class_to_idx
+        # )
 
     def get_net(self):
         self.net.load_state_dict(torch.load(self.model.model_file))

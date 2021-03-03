@@ -7,10 +7,8 @@ of a model
 
 author baiyu
 """
-
 import argparse
 
-# from matplotlib import pyplot as plt
 import os
 import math
 import shutil
@@ -18,8 +16,8 @@ import torch
 import torchvision.transforms as transforms
 from sklearn.metrics import confusion_matrix
 from conf import settings
-from utils import get_network, get_training_dataloader, get_valid_dataloader, get_test_dataloader
-
+from utils.loader import get_training_dataloader, get_valid_dataloader, get_test_dataloader
+from utils.network import get_network
 
 def parse_default_args():
     parser = argparse.ArgumentParser()
@@ -165,18 +163,18 @@ if __name__ == '__main__':
         size=(128, 128)
     )
 
-    # test_loader = get_valid_dataloader(
-    #     root_path=args.src,
-    #     num_workers=4,
-    #     batch_size=args.b,
-    #     shuffle=False,
-    #     size=(128, 128)
-    # )
+    test_loader = get_valid_dataloader(
+        root_path=args.src,
+        num_workers=4,
+        batch_size=args.b,
+        shuffle=False,
+        size=(128, 128)
+    )
 
     net.load_state_dict(torch.load(args.weights))
     # print(net)
     net.eval()
 
     evaluate(args, net, valid_loader)
-    # code_convert = {0:"NG",1:"OK"}
-    # predict(args, net, test_loader,code_convert)
+    code_convert = {0:"NG",1:"OK"}
+    predict(args, net, test_loader,code_convert)

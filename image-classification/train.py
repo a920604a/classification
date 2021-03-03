@@ -6,6 +6,9 @@
 author baiyu
 """
 
+from criterion import LSR
+from utils.loader import get_training_dataloader, get_valid_dataloader
+from utils.network import get_network
 import os
 import sys
 import argparse
@@ -22,10 +25,9 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from conf import settings
-from utils import get_network, get_training_dataloader, get_valid_dataloader, WarmUpLR, \
-    most_recent_folder, most_recent_weights, last_epoch, best_acc_weights, init_weights, split_weights,\
-    time_wrapper
-from criterion import LSR
+from utils.utils import most_recent_folder, most_recent_weights, last_epoch,\
+    best_acc_weights, time_wrapper
+from utils.tricks import init_weights, split_weights, WarmUpLR
 
 
 @time_wrapper
@@ -143,7 +145,7 @@ def parse_default_args():
     parser.add_argument('--train_path', type=str,
                         default='datasets/train-0.8',)
     parser.add_argument('--valid_path', type=str,
-                        default='datasets/val-0.8')
+                        default='datasets/val-0.2')
     return parser.parse_args()
 
 

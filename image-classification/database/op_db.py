@@ -1,13 +1,29 @@
 '''
 Author: yuan
 Date: 2021-02-22 10:06:21
-LastEditTime: 2021-02-22 10:20:02
-FilePath: /yuan-algorithm/image-classification/database/op_db.py
+LastEditTime: 2021-03-03 08:50:18
+FilePath: /aidc-algorithm/image-classification/database/op_db.py
 '''
 from database.mysql_db import Detection
 from contextlib import contextmanager
 from struction import db_data
 import datetime
+import pymysql
+from conf import MYSQL
+
+
+def connectDb(dbName):
+    try:
+        mysqldb = pymysql.connect(
+            host=MYSQL['HOST'],
+            user=MYSQL['USER'],
+            passwd=MYSQL['PASSWD'],
+            database=MYSQL['DB'],)
+        return mysqldb
+    except Exception as e:
+        print('###################connectDb############################')
+        print(e)
+    return None
 
 
 @ contextmanager
