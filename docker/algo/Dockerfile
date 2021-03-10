@@ -1,6 +1,6 @@
 FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
 
-LABEL maintainer="a920604a@gmail.com"
+LABEL maintainer="ya920604a@gmail.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG=C.UTF-8
@@ -15,7 +15,6 @@ RUN apt-get update
 
 RUN apt-get install --no-install-recommends --no-install-suggests -y libmysqlclient-dev
 
-RUN pip install SQLAlchemy pymysql
+RUN pip install SQLAlchemy pymysql yacs
 
 CMD ["/workspace/yuan-algorithm/image-classification/run.sh"]
-

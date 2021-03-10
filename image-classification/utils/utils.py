@@ -2,17 +2,16 @@
 
 author baiyu
 """
-import torch.utils.data
+import datetime
+import functools
+import json
 import os
 import re
-import datetime
+import shutil
+import time
 
 import numpy
-import shutil
-
-import json
-import functools
-import time
+import torch.utils.data
 
 
 def compute_mean_std(cifar100_dataset):
@@ -109,7 +108,8 @@ def time_wrapper(func):
         start = time.perf_counter()
         func_return_val = func(*args, **kwargs)
         end = time.perf_counter()
-        print('run {0:<1} spend : {1:.6f} sec'.format(func.__name__, end-start))
+        print('run {0:<1} spend : {1:.6f} sec'.format(
+            func.__name__, end-start))
         return func_return_val
     return wrapper
 
@@ -119,14 +119,14 @@ def get_job_names(path='./datasets/ketmac'):
 
 
 def relat2abs_path(path: str) -> str:
-    current_path = '/workspace/aidc-algorithm/image-classification/'
-    # current_path = os.getcwd()  # '/workspace/aidc-algorithm/image-classification'
+    current_path = '/workspace/yuan-algorithm/image-classification/'
+    # current_path = os.getcwd()  # '/workspace/yuan-algorithm/image-classification'
     print('current_path', current_path)
     return path.replace('./', current_path)
 
 
 def abs2relat_path(path: str) -> str:
-    current_path = os.getcwd()  # '/workspace/aidc-algorithm/image-classification'
+    current_path = os.getcwd()  # '/workspace/yuan-algorithm/image-classification'
     return path.replace(current_path, '.')
 
 
@@ -200,6 +200,22 @@ def mount2local(src_path, des_path):
     ret_ins, ret_ref = copy_img_list(src_path, des_path)
     print('ret_ins, ret_ref ', len(ret_ins), len(ret_ref))
     assert len(ret_ins) == len(
-        ret_ref), 'please check number of insepection fiels and reference files'
+        ret_ref), f'please check number of {ret_ref} and {ret_ins}'
 
     return img_path, ref_path
+
+
+def get_pannel_folders(path):
+    ret = set()
+    for root, dirname, files in os.walk(path):
+        for f in files:
+            ret.add(root)
+            break
+    return sorted(list(ret))  # using order
+
+
+def make_labels_path(labels: list, img_path, ret_path):
+
+    for l in labels:
+        os.makedirs(os.path.join(img_path, l), exist_ok=True)
+        os.makedirs(os.path.join(ret_path, l), exist_ok=True)

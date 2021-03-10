@@ -5,12 +5,12 @@ practice on cifar100 using pytorch
 ## Requirements
 
 This is my experiment eviroument
-- pytorch:1.6
+- yuan/pytorch:1.6
     - numpy 
     - sklearn 
     - opencv-python 
     - detectron2==0.2.1
-- yuan-predictor-database:2.0.0
+- yuan/predictor-database:2.0.0
   - docker images mysql:**latest**
     
 - SQLAlchemy 

@@ -6,6 +6,7 @@ FilePath: /image-classification/utils/network.py
 '''
 import sys
 
+
 def get_network(args):
     """ return given network
     """

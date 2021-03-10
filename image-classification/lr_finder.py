@@ -1,23 +1,23 @@
 
-from torch.optim.lr_scheduler import _LRScheduler
-import matplotlib.pyplot as plt
 import argparse
 import glob
 import os
 
 import cv2
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.optim.lr_scheduler import _LRScheduler
 from torch.utils.data import DataLoader
-import numpy as np
-
 from torchvision import transforms
-from conf import settings
-from utils.network import get_network
-from utils.loader import get_training_dataloader
 
-import matplotlib
+from conf import settings
+from utils.loader import get_training_dataloader
+from utils.network import get_network
+
 matplotlib.use('Agg')
 
 

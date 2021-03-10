@@ -1,8 +1,8 @@
 '''
 Author: yuan
 Date: 2021-02-24 16:16:25
-LastEditTime: 2021-03-02 09:06:25
-FilePath: /aidc-algorithm/image-classification/engine/defaults.py
+LastEditTime: 2021-03-09 10:32:44
+FilePath: /yuan-algorithm/image-classification/engine/defaults.py
 '''
 from utils.network import get_network
 import copy
@@ -39,11 +39,11 @@ class DefaultPredictor:
     net_cfg = namedtuple('net_cfg', ['net', 'gpu'])
 
     def __init__(self, cfg, gid=0):
-        # self.cfg = cfg.clone()  # cfg can be modified by model
         self.cfg = copy.deepcopy(cfg)
         self.gid = gid
         netcfg = DefaultPredictor.net_cfg(net=self.cfg.NET, gpu=self.cfg.GPU)
         self.model = get_network(netcfg)  # build_model(self.cfg)
+
         self.model.load_state_dict(torch.load(self.cfg.MODEL_FILE))
         self.model = self.model.to(torch.device('cuda:{}'.format(self.gid)))
         self.model.eval()

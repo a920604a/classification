@@ -1,13 +1,12 @@
 '''
 Author: yuan
 Date: 2021-02-24 09:15:42
-LastEditTime: 2021-02-25 15:46:05
-FilePath: /aidc-algorithm/image-classification/utils/tricks.py
+LastEditTime: 2021-03-10 10:31:01
+FilePath: /yuan-algorithm/image-classification/utils/tricks.py
 '''
 import torch
 import torch.nn as nn
 import torchvision
-
 from torch.optim.lr_scheduler import _LRScheduler
 
 
@@ -41,6 +40,16 @@ def filter_ts(code_convert, pre, pro, ruler):
     return pred, prob
 
 
+def batch_filter_ts(code_convert: dict,  pres: list, probs: list, focus_labels: dict):
+    ret_pre = []  # List[str]
+    ret_prob = []  # List[numpy.float32]
+
+    for p, b in zip(pres, probs):
+        pre, prob = filter_ts(code_convert,  int(p), b, focus_labels)
+        ret_pre.append(pre)
+        ret_prob.append(prob)
+    return ret_pre, ret_prob
+    
 def init_weights(net):
     """the weights of conv layer and fully connected layers 
     are both initilized with Xavier algorithm, In particular,

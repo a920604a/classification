@@ -1,7 +1,10 @@
 from collections import namedtuple
+
 import torch
-from utils.loader import get_valid_dataloader, get_test_dataloader
+
+from utils.loader import get_test_dataloader, get_valid_dataloader
 from utils.network import get_network
+
 db_data = namedtuple('db_data', ['model_name',
                                  'site_name',
                                  'product_name',
@@ -57,9 +60,9 @@ db_data = namedtuple('db_data', ['model_name',
 class Cfg():
     def __init__(self, config):
 
-        self.gpus = config.get('gpu')
+        self.gpus = config.get('gpus')
         self.thread_pool = config.get('thread_pool')
-        self.process_pool = config.get('process_pool')
+        # self.process_pool = config.get('process_pool')
         self.batch_size = config.get('batch_size')
         self.result_path = config.get('result_path')
         self.mount_folder_path = config.get('mount_folder_path')
@@ -123,7 +126,6 @@ class Config(Cfg):
 
         else:
             return self.default[0]
-
     def get_model_config(self, job_name):
 
         ret = self.get_job_config(job_name)
@@ -157,17 +159,6 @@ class NN_model():
             shuffle=False,
             size=tuple(model.image_size)
         )
-        # class_to_idx = {l: i for i, l in enumerate(self.model.labels)}
-        # classes = self.model.labels,
-        # self.test_loader = get_test_dataloader(
-        #     root_path=img_path,
-        #     num_workers=works,   # multi-threading
-        #     batch_size=batch_size,
-        #     shuffle=False,
-        #     size=tuple(model.image_size),
-        #     classes=classes,
-        #     class_to_idx=class_to_idx
-        # )
 
     def get_net(self):
         self.net.load_state_dict(torch.load(self.model.model_file))

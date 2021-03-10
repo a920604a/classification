@@ -8,16 +8,19 @@ of a model
 author baiyu
 """
 import argparse
-
-import os
 import math
+import os
 import shutil
+
 import torch
 import torchvision.transforms as transforms
 from sklearn.metrics import confusion_matrix
+
 from conf import settings
-from utils.loader import get_training_dataloader, get_valid_dataloader, get_test_dataloader
+from utils.loader import (get_test_dataloader, get_training_dataloader,
+                          get_valid_dataloader)
 from utils.network import get_network
+
 
 def parse_default_args():
     parser = argparse.ArgumentParser()

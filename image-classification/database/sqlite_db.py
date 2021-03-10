@@ -1,9 +1,14 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+'''
+Author: yuan
+Date: 2021-02-08 14:21:02
+LastEditTime: 2021-03-03 15:35:21
+FilePath: /yuan-algorithm/image-classification/database/sqlite_db.py
+'''
 import datetime
 
-from sqlalchemy import Column, Integer, String, Float, TIMESTAMP
+from sqlalchemy import TIMESTAMP, Column, Float, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 
 def make_model(table_name: str):

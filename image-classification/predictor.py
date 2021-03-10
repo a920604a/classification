@@ -1,23 +1,20 @@
 '''
 Author: yuan
 Date: 2021-02-24 16:05:44
-LastEditTime: 2021-03-03 10:57:16
-FilePath: /aidc-algorithm/image-classification/predictor.py
+LastEditTime: 2021-03-09 10:06:51
+FilePath: /yuan-algorithm/image-classification/predictor.py
 '''
 # Copyright (c) Facebook, Inc. and its affiliates.
 import atexit
 import bisect
+import copy
 import multiprocessing as mp
 from collections import deque
+
 import cv2
 import torch
-import copy
 
-# from detectron2.data import MetadataCatalog
-# from detectron2.engine.defaults import DefaultPredictor
 from engine.defaults import DefaultPredictor
-# from detectron2.utils.video_visualizer import VideoVisualizer
-# from detectron2.utils.visualizer import ColorMode, Visualizer
 
 
 class VisualizationDemo(object):
@@ -38,11 +35,10 @@ class VisualizationDemo(object):
         self.parallel = parallel
         # if parallel:
         #     num_gpu = torch.cuda.device_count()
-        #     print(num_gpu)
-        #     self.predictor = AsyncPredictor(cfg, num_gpus=num_gpu, gid=gid)
+        #     self.predictor = AsyncPredictor(cfg, num_gpus=1)
         # else:
-        #     self.predictor = DefaultPredictor(cfg)
-        self.predictor = DefaultPredictor(cfg)
+        #     self.predictor = DefaultPredictor(cfg, gid=gid)
+        self.predictor = DefaultPredictor(cfg, gid=gid)
 
     def run_on_image(self, image):
         """
@@ -69,7 +65,6 @@ class VisualizationDemo(object):
 
         output = torch.sigmoid(predictions)
         prob = output.cpu().numpy()
-
         return pre, prob
 
 
@@ -102,7 +97,7 @@ class VisualizationDemo(object):
 #                 result = predictor(data)
 #                 self.result_queue.put((idx, result))
 
-#     def __init__(self, cfg, gid, num_gpus: int = 1):
+#     def __init__(self, cfg, num_gpus: int = 1):
 #         """
 #         Args:
 #             cfg (CfgNode):
@@ -112,16 +107,14 @@ class VisualizationDemo(object):
 #         self.task_queue = mp.Queue(maxsize=num_workers * 1)
 #         self.result_queue = mp.Queue(maxsize=num_workers * 1)
 #         self.procs = []
-
 #         for gpuid in range(max(num_gpus, 1)):
-#             # cfg = cfg.clone()
-#             # cfg = copy.deepcopy(cfg)
-#             # cfg.defrost()
+#             cfg = cfg.clone()
+#             cfg.defrost()
 #             # cfg.MODEL.DEVICE = "cuda:{}".format(
 #             #     gpuid) if num_gpus > 0 else "cpu"
 #             self.procs.append(
 #                 AsyncPredictor._PredictWorker(
-#                     cfg, self.task_queue, self.result_queue, gid)
+#                     cfg, self.task_queue, self.result_queue, gpuid)
 #             )
 #         self.put_idx = 0
 #         self.get_idx = 0
@@ -163,6 +156,6 @@ class VisualizationDemo(object):
 #         for _ in self.procs:
 #             self.task_queue.put(AsyncPredictor._StopToken())
 
-#     @property
-#     def default_buffer_size(self):
-#         return len(self.procs) * 5
+#     # @property
+#     # def default_buffer_size(self):
+#     #     return len(self.procs) * 5

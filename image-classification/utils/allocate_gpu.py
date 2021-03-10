@@ -1,10 +1,11 @@
 '''
 Author: yuan
 Date: 2021-02-23 14:30:41
-LastEditTime: 2021-02-23 14:47:44
-FilePath: /image-classification/utils/allocate_gpu.py
+LastEditTime: 2021-03-03 15:32:49
+FilePath: /yuan-algorithm/image-classification/utils/allocate_gpu.py
 '''
 import os
+
 import torch
 
 

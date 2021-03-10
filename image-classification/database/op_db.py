@@ -1,15 +1,17 @@
 '''
 Author: yuan
 Date: 2021-02-22 10:06:21
-LastEditTime: 2021-03-03 08:50:18
-FilePath: /aidc-algorithm/image-classification/database/op_db.py
+LastEditTime: 2021-03-10 11:10:07
+FilePath: /yuan-algorithm/image-classification/database/op_db.py
 '''
-from database.mysql_db import Detection
-from contextlib import contextmanager
-from struction import db_data
 import datetime
+from contextlib import contextmanager
+
 import pymysql
 from conf import MYSQL
+from struction import db_data
+
+from database.mysql_db import Detection
 
 
 def connectDb(dbName):
@@ -27,7 +29,7 @@ def connectDb(dbName):
 
 
 @ contextmanager
-def write_db(data: db_data, Session):
+def write_db(data: db_data, Session, conn):
     detector = Detection()
     detector.model_name = data.model_name
     detector.site_name = data.site_name
@@ -51,8 +53,7 @@ def write_db(data: db_data, Session):
     # detector.update_at = datetime.datetime.now(),
     detector.update_by = data.create_by
 
-    session = Session()
-
+    session = Session(bind = conn)
     try:
         yield
     except Exception as e:

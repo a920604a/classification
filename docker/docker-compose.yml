@@ -15,24 +15,23 @@ services:
       yuan-prediction:
         aliases:
           - yuan-algorithm-mysql
-
+    cap_add:
+      - SYS_NICE
   yuan-algorithm:
     image: yuan-predictor:2.0.0
     container_name: yuan-predictor-algorithm
     restart: unless-stopped
     runtime: nvidia
     environment:
-      - NVIDIA_VISIBLE_DEVICES=0
+      - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - /home/yuan-algorithm/image-classification:/workspace/yuan-algorithm/image-classification
     networks:
       yuan-prediction:
         aliases:
           - yuan-algorithm
-    links:
+    depends_on:
       - yuan-algorithm-mysql
-    command: /workspace/yuan-algorithm/image-classification/run.sh
-
 networks:
   yuan-prediction:
     external: false

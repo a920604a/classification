@@ -1,16 +1,17 @@
 '''
 Author: yuan
 Date: 2021-02-25 15:33:32
-LastEditTime: 2021-03-03 09:37:58
-FilePath: /aidc-algorithm/image-classification/save_data.py
+LastEditTime: 2021-03-10 11:22:03
+FilePath: /yuan-algorithm/image-classification/save_data.py
 '''
+import datetime
 import os
 import shutil
-import datetime
+from contextlib import contextmanager
+
 from database.op_db import write_db
 from struction import db_data
-from utils.utils import get_folder_struct, abs2relat_path
-from contextlib import contextmanager
+from utils.utils import abs2relat_path, get_folder_struct
 
 
 class Save_data(object):
@@ -37,8 +38,17 @@ class Save_data(object):
         _, layer_name, lot_name, pannel_id = get_folder_struct(
             img_dir, self.job_name)
 
-        result_img_folder = os.path.join(self.img_path, pred)
-        result_ref_folder = os.path.join(self.img_path, pred)
+        result_img_folder = os.path.join(self.img_path, self.job_name,
+                                         layer_name, lot_name,
+                                         pannel_id)
+        result_ref_folder = os.path.join(self.ref_path, self.job_name,
+                                         layer_name, lot_name,
+                                         pannel_id)
+        os.makedirs(result_img_folder, exist_ok=True)
+        os.makedirs(result_ref_folder, exist_ok=True)
+
+        # result_img_folder = os.path.join(self.img_path, pred)
+        # result_ref_folder = os.path.join(self.ref_path, pred)
         data_db = db_data(
             model_name=self.model_name,
             site_name=self.site_name,
@@ -61,6 +71,11 @@ class Save_data(object):
             # create_at=datetime.datetime.now(),
             update_by=self.user
         )
+
+        # shutil.copy(file_path, os.path.join(result_img_folder, img_name))
+        # shutil.copy(reference_path, os.path.join(result_ref_folder, img_name))
+        shutil.move(file_path, os.path.join(result_img_folder, img_name))
+        shutil.move(reference_path, os.path.join(result_ref_folder, img_name))
         return data_db
         # with write_db(data_db, self.session):
         #     print("{} is write in database".format(data_db.image_name))

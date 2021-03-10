@@ -1,25 +1,13 @@
 '''
 Author: yuan
-Date: 2021-03-03 11:54:28
-LastEditTime: 2021-03-03 11:57:12
-FilePath: /classification/image-classification/database/mysql_db.py
+Date: 2021-02-09 11:07:46
+LastEditTime: 2021-03-08 08:55:55
+FilePath: /yuan-algorithm/image-classification/database/mysql_db.py
 '''
-# !/usr/bin/python3
-# -*- coding: utf-8 -*-
-"""
-@Author         :  james
-@Version        :
-------------------------------------
-@File           :  BaseModel.py
-@Description    :  ORM封装
-@CreateTime     :  2020/3/8 15:13
-------------------------------------
-@ModifyTime     :
-"""
-from sqlalchemy import func,  Column, Integer, String, Float, TIMESTAMP
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import MetaData
 
+
+from sqlalchemy import TIMESTAMP, Column, Float, Integer, MetaData, String, func
+from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
@@ -40,7 +28,7 @@ class Detection(BaseModel):
     预测记录
     """
     __tablename__ = "t_detection"
-    
+
     model_name = Column(String(100), unique=True, comment="模型名称")
     product_name = Column(String(100), unique=True, comment="产品名称")
     site_name = Column(String(100), unique=True, comment="站点名称")

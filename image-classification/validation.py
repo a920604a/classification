@@ -1,8 +1,8 @@
 '''
 Author: yuan
 Date: 2021-01-26 17:17:56
-LastEditTime: 2021-02-23 14:21:57
-FilePath: /image-classification/validation.py
+LastEditTime: 2021-03-03 15:36:00
+FilePath: /yuan-algorithm/image-classification/validation.py
 '''
 #validation.py
 #!/usr/bin/env python3
@@ -16,15 +16,14 @@ author baiyu
 
 import argparse
 
-from matplotlib import pyplot as plt
-
 import torch
 import torchvision.transforms as transforms
+from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader
 
 from conf import settings
-from utils.netwok import get_network
 from utils.loader import get_valid_dataloader
+from utils.netwok import get_network
 
 if __name__ == '__main__':
 

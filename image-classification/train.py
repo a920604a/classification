@@ -6,12 +6,9 @@
 author baiyu
 """
 
-from criterion import LSR
-from utils.loader import get_training_dataloader, get_valid_dataloader
-from utils.network import get_network
+import argparse
 import os
 import sys
-import argparse
 import time
 from datetime import datetime
 
@@ -20,14 +17,16 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision
-
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from conf import settings
-from utils.utils import most_recent_folder, most_recent_weights, last_epoch,\
-    best_acc_weights, time_wrapper
-from utils.tricks import init_weights, split_weights, WarmUpLR
+from criterion import LSR
+from utils.loader import get_training_dataloader, get_valid_dataloader
+from utils.network import get_network
+from utils.tricks import WarmUpLR, init_weights, split_weights
+from utils.utils import (best_acc_weights, last_epoch, most_recent_folder,
+                         most_recent_weights, time_wrapper)
 
 
 @time_wrapper

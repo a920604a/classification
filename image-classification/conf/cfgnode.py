@@ -1,11 +1,11 @@
 '''
 Author: yuan
 Date: 2021-02-25 14:29:52
-LastEditTime: 2021-02-25 14:45:54
-FilePath: /aidc-algorithm/image-classification/conf/cfgnode.py
+LastEditTime: 2021-03-03 15:35:46
+FilePath: /yuan-algorithm/image-classification/conf/cfgnode.py
 '''
-from yacs.config import CfgNode
 import torch
+from yacs.config import CfgNode
 
 
 def get_cfg(model) -> CfgNode:

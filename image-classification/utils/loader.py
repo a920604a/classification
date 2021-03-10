@@ -2,17 +2,18 @@
 Author: yuan
 Date: 2021-02-23 14:14:20
 LastEditTime: 2021-02-26 10:31:13
-FilePath: /aidc-algorithm/image-classification/utils/loader.py
+FilePath: /yuan-algorithm/image-classification/utils/loader.py
 '''
-import torchvision
-import torchvision.transforms as transforms
-from torch.utils.data import DataLoader, Dataset
-import torch
 import os
 import os.path
-from typing import Any, Callable, cast, Dict, List, Optional, Tuple
-from torchvision.datasets.vision import VisionDataset
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
+
+import torch
+import torchvision
+import torchvision.transforms as transforms
 from PIL import Image
+from torch.utils.data import DataLoader, Dataset
+from torchvision.datasets.vision import VisionDataset
 
 
 def get_training_dataloader(root_path='datasets/train', batch_size=16,
